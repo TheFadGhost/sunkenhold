@@ -1,5 +1,5 @@
 """Heuristic headless agent that plays through the same public actions."""
-from . import combat, content as C, items as I
+from . import content as C, items as I
 from . import progression as PROG
 from .engine import POISON as POISON_MARK, BURNING as BURN_MARK
 
@@ -513,7 +513,7 @@ class Bot:
                 return True
         nxt = explore_nxt
         if nxt is not None:
-            self._guard_dither(p.pos, nxt)
+            nxt = self._guard_dither(p.pos, nxt)
             g.act_move(nxt[0] - p.x, nxt[1] - p.y)
             self.flush()
             return True
@@ -600,7 +600,8 @@ class Bot:
 
     def _guard_dither(self, pos, nxt):
         """Track recent (from,to) steps; when a transition repeats, force an
-        alternate step so explore cannot ping-pong between two pockets."""
+        alternate step so explore cannot ping-pong between two pockets.
+        Returns the step to actually take."""
         from collections import deque
         if not hasattr(self, "_recent"):
             self._recent = deque(maxlen=8)
@@ -615,9 +616,9 @@ class Bot:
                     a = (pos[0] + dx, pos[1] + dy)
                     if lv.walkable(*a) and a not in tried:
                         self._recent.clear()
-                        nxt = a
-                        return
+                        return a
         self._recent.append(key)
+        return nxt
 
     def _nearest_water(self):
         lv = self.g.current_level()

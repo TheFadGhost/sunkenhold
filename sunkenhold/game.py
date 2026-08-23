@@ -5,8 +5,8 @@ from . import ai as AI
 from . import combat, content as C, items as I, pathing
 from . import progression as PROG
 from .engine import (NORMAL_COST, POISON, BURNING, STUN, SLOW, CONFUSED,
-                     Actor, GameState, RNG, apply_status, move_cost,
-                     tick_status, clear_movement_blockers)
+                     Actor, GameState, RNG, effective_speed, apply_status,
+                     move_cost, tick_status)
 from .fov import bresenham_los, compute_fov_glow
 from .items import Item, CAT_ARTEFACT, CAT_AMMO, CAT_SALVAGE
 from .mapgen import generate_level, populate, make_monster
@@ -135,6 +135,13 @@ class Game:
         self.visible = vis
         for x, y in vis:
             lv.seen[y * lv.w + x] = 1
+        for pos in vis:
+            here = lv.items.get(pos)
+            if here:
+                lv.items_seen[pos] = list(here)
+            elif pos in lv.items_seen and not lv.monster_at(*pos) \
+                    and (self.player.x, self.player.y) != pos:
+                pass
         for m in lv.monsters:
             if m.alive and m.pos in vis:
                 PROG.update_memory(self.state, m.species, "seen")
@@ -527,7 +534,9 @@ class Game:
                 lv = self.current_level()
                 lv.items.setdefault((self.player.x, self.player.y),
                                     []).append(item)
-                self.state.add_message(f"You drop {item.key}.", "neutral")
+                self.state.add_message(
+                    f"You drop {I.display_name(self.state, item)}.",
+                    "neutral")
             return NORMAL_COST
         return self._wrap(drop)
 

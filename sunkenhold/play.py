@@ -1,7 +1,7 @@
 """The live play loop: input dispatch, targeting, look, travel, end screens."""
 import datetime
 
-from . import combat, content as C, items as I, morgue
+from . import content as C, items as I, morgue
 from . import progression as PROG
 from . import save as SAVE
 from . import screens as SC

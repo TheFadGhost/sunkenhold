@@ -39,7 +39,6 @@ def _bot_seed(master):
 
 def run_batch(seeds, max_turns=40000, mode="greedy", workers=None):
     if len(seeds) >= 4:
-        import os
         from concurrent.futures import ProcessPoolExecutor
         if workers is None:
             workers = min(8, max(2, os.cpu_count() - 1))
@@ -49,8 +48,8 @@ def run_batch(seeds, max_turns=40000, mode="greedy", workers=None):
                                       [(s, max_turns, mode)
                                        for s in seeds]))
             return results
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"parallel run failed ({e!r}); falling back to serial")
     results = []
     for s in seeds:
         try:

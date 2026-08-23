@@ -11,6 +11,11 @@ def box(scr, lay, title, lines, sel=None):
     w = min(max([len(t) for t in lines] + [len(title)]) + 4,
             lay["map"][2] - 2)
     h = min(len(lines) + 2, lay["map"][3])
+    body_h = h - 2
+    start = 0
+    if sel is not None and sel >= body_h:
+        start = sel - body_h + 1
+    shown = lines[start:start + body_h]
     for row in range(h):
         edge = "|" if 0 < row < h - 1 else "+"
         scr.put(mx0, my0 + row, edge, TH.T.UI_BORDER)
@@ -18,32 +23,27 @@ def box(scr, lay, title, lines, sel=None):
         fill = "-" if row in (0, h - 1) else " "
         for col in range(1, w - 1):
             scr.put(mx0 + col, my0 + row, fill, TH.T.UI_BORDER)
-    scr.text(mx0 + 2, my0, title[:w - 4], TH.T.UI_TITLE, bold=True)
-    for i, line in enumerate(lines[:h - 2]):
+    title_txt = title if start == 0 else f"{title} (+{start})"
+    scr.text(mx0 + 2, my0, title_txt[:w - 4], TH.T.UI_TITLE, bold=True)
+    for i, line in enumerate(shown):
         tok = TH.T.LOG_NEUTRAL
         bold = False
-        if sel is not None and i == sel:
+        idx = start + i
+        if sel is not None and idx == sel:
             tok = TH.T.UI_TITLE
             bold = True
         scr.text(mx0 + 2, my0 + 1 + i, line[:w - 4], tok, bold=bold)
 
 
 def help_lines(bindings):
-    out = ["Sunkenhold keys", ""]
-    for cmd, desc in [
-        ("wait", "pass a turn"), ("rest", "rest until healed"),
-        ("pickup", "take items here"), ("descend", "stairs down"),
-        ("ascend", "stairs up / win at floor 1"),
-        ("inventory", "backpack"), ("character", "stats and memory"),
-        ("look", "examine tiles"), ("fire", "shoot bow"),
-        ("explore", "auto-explore"), ("travel", "travel to tile"),
-        ("history", "message history"),
-        ("save_quit", "save and exit"),
-        ("quit_menu", "menu or cancel"),
-    ]:
+    """Exactly fills an 80x24 overlay: one row per command."""
+    from .keys import COMMAND_HELP
+    out = []
+    for cmd, desc in COMMAND_HELP:
+        if cmd == "move_*":
+            continue
         out.append(f"  {bindings.primary(cmd):>8}  {desc}")
     out.append("  move     hjklyubn or arrows")
-    out.append("  ?        this help")
     return out
 
 

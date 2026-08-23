@@ -1,6 +1,4 @@
 """Procedural level generation with themed variants and guaranteed connectivity."""
-import random
-
 from . import content as C
 from .engine import (Level, T_WALL, T_FLOOR, T_DOOR_CLOSED, T_DOOR_OPEN,
                      T_DOWN, T_UP, T_RUBBLE, T_WATER, T_FUNGUS, T_VENT)

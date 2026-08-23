@@ -14,10 +14,6 @@ def layout(scr):
             "footer_y": scr.h - 1}
 
 
-def _monster_glyph(m):
-    return C.SPECIES[m.species].letter if m.species in C.SPECIES else "?"
-
-
 def draw_map(scr, game, lay, cursor=None):
     lv = game.current_level()
     x0, y0, w, h = lay["map"]
@@ -36,11 +32,15 @@ def draw_map(scr, game, lay, cursor=None):
             code = lv.tile(mx, my)
             dim = not vis
             bold = False
-            ch = TH.tile_glyph(code)
+            ch = TH.tile_glyph(code, scr.ascii_mode)
             tok = TH.tile_token(code)
             if (mx, my) in lv.traps_found:
                 ch, tok = "^", TH.T.TRAP
-            items_here = lv.items.get((mx, my)) if (vis or seen) else None
+            items_here = None
+            if vis:
+                items_here = lv.items.get((mx, my))
+            elif seen:
+                items_here = getattr(lv, "items_seen", {}).get((mx, my))
             m = lv.monster_at(mx, my) if vis else None
             if m is not None and m.alive:
                 s = C.SPECIES[m.species]
@@ -58,7 +58,7 @@ def draw_map(scr, game, lay, cursor=None):
     if cursor is not None:
         cx, cy = cursor
         col, row = cx - camx + x0, cy - camy + y0
-        if 0 <= col < x0 + w and 0 <= row < y0 + h:
+        if x0 <= col < x0 + w and y0 <= row < y0 + h:
             old = scr.chars[row][col]
             oldt = scr.tokens[row][col]
             scr.put(col, row, old if old != " " else "X", oldt, bold=True)
@@ -66,6 +66,7 @@ def draw_map(scr, game, lay, cursor=None):
 
 def draw_sidebar(scr, game, lay, extra=None):
     sx = lay["sidebar_x"]
+    max_row = lay["log_y0"] - 1
     p = game.player
     scr.text(sx, 0, "Sunkenhold".ljust(SIDEBAR_W), TH.T.UI_TITLE, bold=True)
     scr.text(sx, 1, f"Delver the lvl {p.level}".ljust(SIDEBAR_W),
@@ -96,7 +97,7 @@ def draw_sidebar(scr, game, lay, extra=None):
     order = ["poison", "burning", "stun", "slow", "confused",
              "might", "stone", "haste"]
     for name in order:
-        if name in st:
+        if name in st and row < max_row:
             turns = st[name]["turns"]
             stacks = st[name].get("stacks", 1)
             label = f"{name} ({turns})"
@@ -108,13 +109,15 @@ def draw_sidebar(scr, game, lay, extra=None):
             scr.text(sx, row, label[:SIDEBAR_W].ljust(SIDEBAR_W), tok)
             row += 1
 
-    if game.has_artefact():
+    if game.has_artefact() and row + 1 < max_row:
         scr.text(sx, row, "carrying:".ljust(SIDEBAR_W), TH.T.ARTEFACT)
         scr.text(sx, row + 1, "Tideglass Heart".ljust(SIDEBAR_W),
                  TH.T.ARTEFACT, bold=True)
         row += 2
     if extra:
         for line in extra:
+            if row >= max_row:
+                break
             scr.text(sx, row, line[:SIDEBAR_W].ljust(SIDEBAR_W),
                      TH.T.STATUS_INFO)
             row += 1
@@ -125,10 +128,11 @@ def draw_log(scr, game, lay):
     msgs = list(game.state.messages)[-hgt:]
     toktok = {"good": TH.T.LOG_GOOD, "bad": TH.T.LOG_BAD,
               "info": TH.T.LOG_INFO, "neutral": TH.T.LOG_NEUTRAL}
+    width = lay["sidebar_x"] - 1
     for i, (text, kind, count) in enumerate(msgs):
         shown = text if count <= 1 else f"{text} (x{count})"
-        shown = shown[:lay["map"][2] + SIDEBAR_W]
-        scr.text(0, y0 + i, shown.ljust(min(len(shown) + 1, scr.w)),
+        shown = shown[:width]
+        scr.text(0, y0 + i, shown.ljust(min(len(shown) + 1, width)),
                  toktok.get(kind, TH.T.LOG_NEUTRAL))
 
 

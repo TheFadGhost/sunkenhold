@@ -1,5 +1,4 @@
 """Player creation, regeneration, charms, level-up choices, monster memory."""
-from . import content as C
 from .engine import Actor
 from .rng import RNG
 

@@ -59,7 +59,7 @@ PAPER = {
 }
 
 CONTRAST = {
-    "WALL": (7, 15), "FLOOR": (0, 0), "DOOR": (11, 11), "STAIRS": (15, 15),
+    "WALL": (7, 15), "FLOOR": (8, 238), "DOOR": (11, 11), "STAIRS": (15, 15),
     "WATER": (12, 21), "FUNGUS": (10, 46), "RUBBLE": (8, 244),
     "VENT": (9, 196), "TRAP": (11, 220),
     "ITEM_UNID": (15, 255), "POTION": (13, 201), "SCROLL": (11, 226),
@@ -75,7 +75,7 @@ CONTRAST = {
 }
 
 SAFE16 = {
-    "WALL": (8, 8), "FLOOR": (0, 0), "DOOR": (6, 6), "STAIRS": (7, 7),
+    "WALL": (8, 8), "FLOOR": (8, 8), "DOOR": (6, 6), "STAIRS": (7, 7),
     "WATER": (4, 4), "FUNGUS": (2, 2), "RUBBLE": (8, 8), "VENT": (1, 1),
     "TRAP": (3, 3),
     "ITEM_UNID": (7, 7), "POTION": (5, 5), "SCROLL": (3, 3),
@@ -109,11 +109,6 @@ def family_token(family):
     }.get(family, T.MON_BEAST)
 
 
-def species_letter(key):
-    from . import content as C
-    return C.SPECIES[key].letter
-
-
 def species_token(key):
     from . import content as C
     return family_token(C.SPECIES[key].family)
@@ -130,7 +125,7 @@ def tile_token(code, found_trap=False):
 
 def tile_glyph(code, ascii_mode=True):
     g = {0: "#", 1: ".", 2: "+", 3: "'", 4: ">", 5: "<", 6: ",", 7: "~",
-         8: '"', 9: "*"}
+         8: '"', 9: "%"}
     if not ascii_mode:
         g = dict(g, **{7: "≈", 8: "❦"})
     return g.get(code, "?")

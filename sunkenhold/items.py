@@ -48,26 +48,6 @@ class Item:
                    d["appearance"], d["value"])
 
 
-def _cat_of(key):
-    if key in C.WEAPONS:
-        return CAT_WEAPON
-    if key in C.RANGED:
-        return CAT_RANGED
-    if key in C.AMMO:
-        return CAT_AMMO
-    if key in C.ARMOURS:
-        return CAT_ARMOUR
-    if key in C.CHARMS:
-        return CAT_CHARM
-    if key in C.POTIONS:
-        return CAT_POTION
-    if key in C.SCROLLS:
-        return CAT_SCROLL
-    if key in C.WANDS:
-        return CAT_WAND
-    raise KeyError(key)
-
-
 def make_item(rng, depth, category=None):
     """Roll one item appropriate for `depth` using the run RNG."""
     if category is None:
@@ -297,7 +277,7 @@ def token_for(game, item):
         return T.ITEM_UNID
     return {
         CAT_POTION: T.POTION, CAT_SCROLL: T.SCROLL, CAT_WAND: T.WAND,
-        CAT_WEAPON: T.WEAPON, CAT_RANGED: T.WEAPON, CAT_AMMO: T.WEAPON,
+        CAT_WEAPON: T.WEAPON, CAT_RANGED: T.WEAPON, CAT_AMMO: T.SALVAGE,
         CAT_ARMOUR: T.ARMOUR, CAT_CHARM: T.CHARM, CAT_SALVAGE: T.SALVAGE,
         CAT_ARTEFACT: T.ARTEFACT,
     }[item.category]

@@ -69,5 +69,3 @@ def read_key(idle_fn=None):
         time.sleep(0.05)
 
 
-KEY_NAMES = ["up", "down", "left", "right", "home", "end", "pgup", "pgdn",
-             "enter", "escape", "tab", "backspace"]

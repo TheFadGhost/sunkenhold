@@ -36,9 +36,7 @@ and why look mode exists.
 | `"` | fungus patch | chance of poison spores when stepped |
 | `,` | rubble | costs 1.5x movement energy |
 | `%` | ember vent | may ignite the careless; glows (visible at range) |
-| `&` | the Tideglass Heart | unique artefact |
-
-### Items
+| `&` | the Tideglass Heart | unique artefact |### Items
 
 | Glyph | Category |
 |---|---|
@@ -51,6 +49,9 @@ and why look mode exists.
 | `=` | charm (trinket slot) |
 | `*` | salvage (score treasure, auto-picked) |
 | `&` | artefact when lying on the floor |
+
+Arrows share the `(` glyph with bows but use a distinct colour token, so the
+most commonly co-occurring pair never matches on both channels.
 
 Unidentified items use the neutral ITEM_UNIDENTIFIED token. After identification
 they take their appearance colour — which matches the run's appearance name
@@ -75,6 +76,7 @@ colour off (the deuteranopia/protanopia guarantee rests on this, not on hue).
 | `p` | poolwatcher (stationary gaze) |
 | `b` | barrow brute (slow tank) |
 | `k` | skitterking (flees, returns with friends) |
+| `t` | drowned thrall (the Warden's summon) |
 | `W` | the Drowned Warden (boss, floor 12) |
 
 Monster family colours: beast, ranged, undead, abomination, boss — five distinct
@@ -91,12 +93,13 @@ Fixed proportions derived from measured terminal size, never assumed:
 - Map viewport: everything else (all columns left of the sidebar minus a 1-column
   gutter, all rows above the log).
 
-At exactly **80x24**: map viewport 60 cols x 19 rows, sidebar 19 cols x 19 rows,
-log 4 rows, footer 1 row. Nothing clips; if the measured size is smaller than
+At exactly **80x24**: map viewport 60 cols x 19 rows (its bottom row doubles
+as the prompt strip for targeting/look prompts), sidebar 19 cols, log 4 rows,
+footer 1 row. Nothing clips; if the measured size is smaller than
 80x24 the game refuses to start (or shows an overlay on shrink mid-run) with one
 clear sentence and restores the terminal cleanly. Larger terminals grow the map
 viewport first, then the log; the sidebar stays 19 columns. Panels never change
-position between turns.
+position between turns. Sidebar writes are clamped above the log.
 
 Sidebar contents (top to bottom): name and level, HP bar drawn as
 `HP [####....] 12/20`, stats line, depth, active status effects with remaining
@@ -157,8 +160,9 @@ opens full history, paginated, oldest first, Esc closes.
 Rendering code references **tokens only**; hex/palette values live exclusively in
 theme tables. Tokens: `WALL FLOOR DOOR STAIRS WATER FUNGUS RUBBLE VENT TRAP
 ITEM_UNID POTION SCROLL WAND WEAPON ARMOUR CHARM SALVAGE ARTEFACT MON_BEAST
-MON_RANGED MON_UNDEAD MON_ABOM MON_BOSS PLAYER LOG_GOOD LOG_BAD LOG_NEUTRAL HP_OK
-HP_LOW STATUS_BAD STATUS_INFO`. Four shipped themes: `classic` (dark), `paper`
+MON_RANGED MON_UNDEAD MON_ABOM MON_BOSS PLAYER LOG_GOOD LOG_BAD LOG_NEUTRAL
+LOG_INFO HP_OK HP_LOW STATUS_BAD STATUS_INFO UI_BORDER UI_DIM UI_TITLE`. Four
+shipped themes: `classic` (dark), `paper`
 (light terminals), `contrast` (high contrast), `safe16` (16-colour-safe). Every
 theme keeps visible/remembered/unknown distinct (dim attribute does the heavy
 lifting) and keeps hostiles identifiable at a glance. `NO_COLOR` env var or

@@ -130,8 +130,6 @@ def monster_turn(game, m):
         return _kiter(game, m, occupied)
     if ai == "pack":
         return _pack(game, m, occupied)
-    if ai == "ambusher":
-        pass
     if ai == "gaze":
         return _gaze(game, m)
     if ai == "coward":

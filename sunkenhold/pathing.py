@@ -1,8 +1,6 @@
 """Shared pathfinding. One Dijkstra map per player position serves all actors."""
 import heapq
 
-from .engine import move_cost
-
 _WALK = {1, 2, 3, 4, 5, 6, 7, 8, 9}
 _COST = {1: 100, 2: 200, 3: 100, 4: 100, 5: 100, 6: 150, 7: 200, 8: 100,
          9: 100}
@@ -47,10 +45,6 @@ def dijkstra_map(level, sources):
                 dist[j] = nd
                 push(pq, (nd, j))
     return dist
-
-
-def get_dist(dmap, level, x, y):
-    return dmap[y * level.w + x]
 
 
 _NEIGH8 = ((0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1))

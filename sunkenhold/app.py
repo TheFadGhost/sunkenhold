@@ -10,7 +10,7 @@ from .game import Game
 from .input import read_key
 from .keys import Bindings
 from .render import Screen
-from .view import layout, draw_footer
+from .view import layout, draw_map, draw_sidebar, draw_log, draw_footer
 
 
 class App:
@@ -150,10 +150,12 @@ class App:
             scr.flush()
         if buf.strip() == "":
             return int.from_bytes(os.urandom(8), "little")
+        import hashlib
         try:
             return int(buf)
         except ValueError:
-            return abs(hash(buf)) % (1 << 62)
+            return int.from_bytes(
+                hashlib.sha256(buf.encode()).digest()[:8], "little")
 
     def _flash(self, msg):
         lay = self._lay()

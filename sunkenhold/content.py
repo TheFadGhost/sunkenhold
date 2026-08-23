@@ -3,9 +3,6 @@
 All names and flavour text are original writing created for Sunkenhold.
 """
 
-FAMILIES = ("beast", "ranged", "undead", "abom", "boss")
-
-
 class Species:
     def __init__(self, key, letter, name, family, ai, min_depth, weight,
                  hp, speed, acc, eva, armour, dmg, dmg_bonus=0, crit_bonus=0,

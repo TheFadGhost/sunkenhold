@@ -133,12 +133,6 @@ def tick_status(target):
     return events, died
 
 
-def clear_movement_blockers(target):
-    """Water extinguishes burning."""
-    if BURNING in target.statuses:
-        del target.statuses[BURNING]
-
-
 class Level:
     def __init__(self, depth, w, h, tiles, theme):
         self.depth = depth
@@ -150,6 +144,7 @@ class Level:
         self.up = None
         self.down = None
         self.seen = bytearray(w * h)
+        self.items_seen = {}
         self.items = {}
         self.monsters = []
         self.traps_hidden = set()
@@ -189,6 +184,8 @@ class Level:
             "tiles": bytes(self.tiles).hex(), "theme": self.theme,
             "rooms": self.rooms, "up": self.up, "down": self.down,
             "seen": bytes(self.seen).hex(),
+            "items_seen": {f"{x},{y}": [i.to_dict() for i in v]
+                           for (x, y), v in self.items_seen.items()},
             "items": {f"{x},{y}": [i.to_dict() for i in v]
                       for (x, y), v in self.items.items()},
             "monsters": [m.to_dict() for m in self.monsters],
@@ -206,6 +203,10 @@ class Level:
         lv.up = tuple(d["up"]) if d["up"] else None
         lv.down = tuple(d["down"]) if d["down"] else None
         lv.seen = bytearray(bytes.fromhex(d["seen"]))
+        lv.items_seen = {
+            (int(k.split(",")[0]), int(k.split(",")[1])):
+                [item_from_dict(i) for i in v]
+            for k, v in d.get("items_seen", {}).items()}
         lv.items = {(int(k.split(",")[0]), int(k.split(",")[1])):
                     [item_from_dict(i) for i in v] for k, v in d["items"].items()}
         lv.monsters = [Actor.from_dict(m) for m in d["monsters"]]

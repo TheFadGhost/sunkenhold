@@ -3,8 +3,6 @@ import hashlib
 import json
 import os
 
-from . import items as I
-from .engine import GameState
 
 SAVE_VERSION = 3
 

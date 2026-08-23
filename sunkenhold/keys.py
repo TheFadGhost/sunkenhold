@@ -20,7 +20,7 @@ DEFAULT_KEYS = {
     "inventory": ["i"],
     "character": ["C"],
     "help": ["?"],
-    "history": ["\x10", "pgup2"],
+    "history": ["\x10"],
     "look": ["x"],
     "fire": ["f"],
     "explore": ["o"],
@@ -70,12 +70,6 @@ class Bindings:
             if key in keys:
                 return cmd
         return None
-
-    def keys_for(self, cmd):
-        out = []
-        for k in self.map.get(cmd, []):
-            out.append(_pretty(k))
-        return ", ".join(k for k in out if k != "n/a")
 
     def primary(self, cmd):
         ks = self.map.get(cmd) or []
