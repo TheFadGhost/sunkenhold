@@ -100,7 +100,8 @@ recorded in a local morgue file with its seed so any run can be replayed.
 Measured with the bundled greedy bot (`sunkenhold simulate`, seeds 1–200,
 15k-turn cap): win rate 0.5%, median depth 6, early-game (floors 1–2) deaths
 0%, zero crashes, zero soft-locks. Seed **90** is a recorded complete
-playthrough (6424 turns, score 843) asserted in the test suite.
+playthrough (6424 turns, score 843) asserted in the test suite — full
+floor-by-floor transcript in [`docs/WIN_SEED_90.md`](docs/WIN_SEED_90.md).
 
 ## Terminal requirements
 

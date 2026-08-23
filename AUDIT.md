@@ -66,3 +66,20 @@ median depth 6, mean 5.97, floors-1–2 death share 0%, zero crashes, zero
 softlocks. Seed 90 demonstrated complete playthrough asserted in
 `tests/test_sim.py`. The WIN_GATE statistical check remains opt-in via env var
 so the default suite stays deterministic.
+
+## 5. Re-audit (post-fix verification)
+
+An independent re-check confirmed all eleven design findings FIXED with
+correct line-level evidence and no new defects in the touched code paths.
+Three nits from the re-check were fixed in the same pass: a dead `elif` left
+in `refresh_vision`, the item-menu highlight offset (selection now lands on
+verb rows), and inventory pagination (`-`/`+`) so pack entries beyond one
+screen are never selectable-but-invisible. A residual cosmetic `_pretty`
+branch for a removed phantom binding was also deleted.
+
+Clean-room verification: fresh `git clone`, `pip install .`,
+`sunkenhold --version`, full suite green, seed-90 replay wins.
+
+## Verdict
+
+Zero open findings. v1.0.0 tagged.

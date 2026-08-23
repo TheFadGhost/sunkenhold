@@ -79,8 +79,6 @@ class Bindings:
 def _pretty(k):
     names = {" ": "space", "\x10": "ctrl+p", "escape": "esc",
              "enter": "enter", "tab": "tab"}
-    if k == "pgup2":
-        return "n/a"
     return names.get(k, k)
 
 

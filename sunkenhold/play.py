@@ -152,19 +152,33 @@ class PlaySession:
 
     def inventory_screen(self):
         g = self.game
+        page = 0
+
+        def per_page():
+            lay = self.lay()
+            return max(1, lay["map"][3] - 8)
+
         while True:
             scr = self.scr
             scr.clear()
             lay = self.lay()
-            lines = SC.inventory_lines(g)
+            lines = SC.inventory_lines(g, page, per_page())
             SC.box(scr, lay, "Inventory", lines)
             self.draw_log_only(lay)
             scr.flush()
             k = self.key()
             if k in ("escape", "i"):
                 return
-            if isinstance(k, str) and k in LETTERS[:len(g.player.inventory)]:
-                item = g.player.inventory[LETTERS.index(k)]
+            if k in ("+", "=", "pgdn"):
+                page += 1
+                continue
+            if k in ("-", "pgup"):
+                page = max(0, page - 1)
+                continue
+            start = page * per_page()
+            chunk = g.player.inventory[start:start + per_page()]
+            if isinstance(k, str) and k in LETTERS[:len(chunk)]:
+                item = chunk[LETTERS.index(k)]
                 if self.item_menu(item):
                     return
 
@@ -180,7 +194,7 @@ class PlaySession:
                      I.describe(g.state, item), ""]
             lines += [f"[{i + 1}] {v}" for i, v in enumerate(verbs)]
             lines += ["[esc] back"]
-            SC.box(scr, lay, "Item", lines, sel=sel)
+            SC.box(scr, lay, "Item", lines, sel=3 + sel)
             self.draw_log_only(lay)
             scr.flush()
             k = self.key()

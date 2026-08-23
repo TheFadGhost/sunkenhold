@@ -47,7 +47,7 @@ def help_lines(bindings):
     return out
 
 
-def inventory_lines(game):
+def inventory_lines(game, page=0, per_page=None):
     p = game.player
     out = []
     for slot in ("weapon", "shield", "armour", "charm"):
@@ -56,12 +56,21 @@ def inventory_lines(game):
         cur = " [cursed]" if it and it.cursed else ""
         out.append(f"{slot:>7}: {nm}{cur}")
     out.append("")
-    if not p.inventory:
+    items = p.inventory
+    if per_page is None:
+        per_page = max(1, len(items))
+    start = page * per_page
+    chunk = items[start:start + per_page]
+    if not chunk:
         out.append("(pack is empty)")
-    for idx, it in enumerate(p.inventory):
-        letter = LETTERS[idx]
+    for idx, it in enumerate(chunk):
+        letter = LETTERS[(start + idx) % len(LETTERS)]
         out.append(f"{letter}) {I.display_name(game.state, it)} -- "
                    f"{I.describe(game.state, it)}")
+    pages = max(1, (len(items) + per_page - 1) // per_page)
+    if pages > 1:
+        out.append(f"  -- page {page + 1}/{pages}: "
+                   f"'-' and '+' to turn --")
     return out
 
 

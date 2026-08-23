@@ -139,9 +139,6 @@ class Game:
             here = lv.items.get(pos)
             if here:
                 lv.items_seen[pos] = list(here)
-            elif pos in lv.items_seen and not lv.monster_at(*pos) \
-                    and (self.player.x, self.player.y) != pos:
-                pass
         for m in lv.monsters:
             if m.alive and m.pos in vis:
                 PROG.update_memory(self.state, m.species, "seen")
