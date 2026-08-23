@@ -8,3 +8,4 @@ morgue*.jsonl
 baselines_local/
 dist/
 build/
+sunkenhold.egg-info/
