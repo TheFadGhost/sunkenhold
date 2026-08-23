@@ -1,0 +1,27 @@
+{
+ "crashes": 0,
+ "deaths_by_cause": {
+  "burned alive": 9,
+  "killed by lingering wounds": 13,
+  "killed by poison": 46,
+  "slain by the barrow brute": 13,
+  "slain by the cinder sprite": 19,
+  "slain by the gnawling": 9,
+  "slain by the husk": 12,
+  "slain by the murk hound": 4,
+  "slain by the poolwatcher": 23,
+  "slain by the reedshot": 23,
+  "slain by the seepslime": 1,
+  "slain by the skitterking": 10,
+  "slain by the tombweaver": 17
+ },
+ "early_deaths_f12": 0.0,
+ "mean_depth": 5.97,
+ "median_depth": 6.0,
+ "median_turns": 1227.5,
+ "runs": 200,
+ "seeds": "1..200 greedy maxturns=15000",
+ "softlocks": 0,
+ "win_rate": 0.005,
+ "wins": 1
+}

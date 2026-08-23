@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+data/
+*.save
+morgue*.jsonl
+baselines_local/
+dist/
+build/
