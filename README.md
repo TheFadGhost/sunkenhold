@@ -47,6 +47,8 @@ sunkenhold simulate --runs 100   # headless bot batch + statistics
 Requires Python 3.10+. On legacy Windows consoles the game enables VT
 processing automatically and refuses cleanly if the terminal cannot.
 
+Run the test suite with `python run_tests.py` (55 tests, no dependencies).
+
 ## How to play
 
 Descend twelve floors, take **the Tideglass Heart** from the Warden's vault,
