@@ -1,5 +1,12 @@
 # Sunkenhold
 
+> **built with ox alpha**
+>
+> most of this was written in august 2026 during the free preview window of
+> [ox alpha](https://openrouter.ai/stealth/ox-alpha), an anonymous stealth model
+> that turned up on openrouter for about a week. i set the direction and reviewed
+> what came back. the tests are real and they pass — clone it and run them.
+
 A turn-based ASCII roguelike of a drowned keep: twelve floors down, one
 beating artefact, no way out but back up. For players who want a compact,
 complete dungeon crawl they can actually finish.
